@@ -98,42 +98,6 @@ RTL/
 └── testbench/                   # Verification testbenches
 ```
 
-## Module Descriptions
-
-### MIPI_TX.v
-Main transmitter module responsible for:
-- Parallel to serial data conversion
-- High-speed data transmission
-- Interface with TX controller
-
-### MIPI_TX_Controller.v  
-Transmitter control logic handling:
-- Transmission sequencing
-- Control signal generation
-- State machine management
-
-### TX_Clock_Manager.v
-Clock management for transmitter:
-- Clock generation for TX operations
-- Clock distribution to TX components
-
-### MIPI_RX.v
-Main receiver module responsible for:
-- Serial to parallel data conversion
-- High-speed data reception
-- Interface with RX controller
-
-### MIPI_RX_Controller.v
-Receiver control logic handling:
-- Reception sequencing  
-- Control signal management
-- State machine operations
-
-### RX_Clock_Manager.v
-Clock management for receiver:
-- Clock recovery operations
-- Clock distribution to RX components
-
 ## Getting Started
 
 ### Prerequisites
