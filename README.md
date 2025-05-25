@@ -33,7 +33,7 @@ The D-PHY typically consists of clock and data lanes operating as differential p
 ![System Block Diagram](Figures/Block_diagram.png)
 
 ### Master-Slave Configuration
-*[Master-slave diagram placeholder - Insert diagram showing the master-slave relationship and data flow between transmitter and receiver]*
+![Master-slave diagram placeholder](Figures/Master_Slave.png)
 
 ## Implementation Details
 
