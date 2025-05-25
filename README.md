@@ -2,21 +2,19 @@
 
 ## Overview
 
-This project presents a comprehensive design and implementation of a MIPI (Mobile Industry Processor Interface) D-PHY transmitter and receiver system. The D-PHY specification defines the physical layer for high-speed serial interfaces commonly used in mobile and embedded systems for camera sensor interfaces, display connections, and other high-bandwidth applications.
+This project presents a design and implementation of a MIPI (Mobile Industry Processor Interface) D-PHY transmitter and receiver system. The D-PHY specification defines the physical layer for high-speed serial interfaces commonly used in mobile and embedded systems for camera sensor interfaces, display connections, and other high-bandwidth applications.
 
 ## Table of Contents
 
 - [Overview](#overview)
 - [MIPI D-PHY Background](#mipi-d-phy-background)
 - [System Architecture](#system-architecture)
-- [Features](#features)
-- [Practical Applications](#practical-applications)
 - [Implementation Details](#implementation-details)
-- [File Structure](#file-structure)
+- [Practical Applications](#practical-applications)
+- [RTL Structure](#rtl-structure)
+- [Module Descriptions](#module-descriptions)
 - [Getting Started](#getting-started)
 - [Simulation and Testing](#simulation-and-testing)
-- [Performance Specifications](#performance-specifications)
-- [Future Enhancements](#future-enhancements)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -24,14 +22,10 @@ This project presents a comprehensive design and implementation of a MIPI (Mobil
 
 The MIPI D-PHY (Display Physical Layer) is a specification developed by the MIPI Alliance that defines a high-speed serial interface physical layer. It operates in two primary modes:
 
-- **High-Speed (HS) Mode**: Differential signaling for high data rates (80 Mbps to 2.5 Gbps per lane)
+- **High-Speed (HS) Mode**: Differential signaling for high data rates
 - **Low-Power (LP) Mode**: Single-ended signaling for control and low-speed data transmission
 
-The D-PHY typically consists of:
-- One clock lane (differential pair)
-- One to four data lanes (differential pairs each)
-- Bidirectional communication capability
-- Power-efficient design optimized for battery-powered devices
+The D-PHY typically consists of clock and data lanes operating as differential pairs, with bidirectional communication capability and power-efficient design optimized for battery-powered devices.
 
 ## System Architecture
 
@@ -41,16 +35,28 @@ The D-PHY typically consists of:
 ### Master-Slave Configuration
 *[Master-slave diagram placeholder - Insert diagram showing the master-slave relationship and data flow between transmitter and receiver]*
 
-## Features
+## Implementation Details
 
-- **Complete D-PHY Implementation**: Full transmitter and receiver design
-- **Multi-Lane Support**: Configurable number of data lanes (1-4 lanes)
-- **Dual-Mode Operation**: Both High-Speed and Low-Power modes
-- **Clock Data Recovery (CDR)**: Robust clock recovery mechanism
-- **Lane Synchronization**: Proper lane alignment and synchronization
-- **Error Detection**: Built-in error detection and correction mechanisms
-- **Configurable Data Rates**: Support for various speed grades
-- **Low Power Design**: Optimized for mobile and battery-powered applications
+Based on the RTL implementation, this project includes the following key components:
+
+### Transmitter Components
+- **MIPI TX**: Main transmitter module handling data transmission
+- **MIPI TX Controller**: Control logic for transmission operations
+- **TX Clock Management**: Clock generation and distribution for transmitter
+- **Serial Data Transmission**: Conversion of parallel data to serial format
+
+### Receiver Components  
+- **MIPI RX**: Main receiver module for data reception
+- **MIPI RX Controller**: Control logic for reception operations
+- **RX Clock Management**: Clock recovery and distribution for receiver
+- **Serial Data Reception**: Conversion of serial data back to parallel format
+
+### Core Features
+- Single lane D-PHY implementation
+- High-Speed (HS) mode operation
+- Separate transmitter and receiver designs
+- Dedicated controller modules for TX/RX operations
+- Clock management for both transmission and reception paths
 
 ## Practical Applications
 
@@ -59,119 +65,105 @@ The MIPI D-PHY interface finds extensive use in modern electronic systems:
 ### Mobile Devices
 - **Camera Sensor Interface**: Connecting image sensors to application processors in smartphones and tablets
 - **Display Interface**: High-resolution display connectivity for mobile screens
-- **Multi-Camera Systems**: Supporting multiple camera configurations (main, ultra-wide, telephoto)
+- **Multi-Camera Systems**: Supporting camera configurations in mobile devices
 
 ### Automotive Systems
 - **ADAS Cameras**: Advanced Driver Assistance Systems requiring high-bandwidth camera data
-- **Surround View Systems**: Multiple camera inputs for 360-degree vehicle monitoring
-- **In-Vehicle Infotainment**: Display connectivity for dashboard and entertainment systems
+- **Surround View Systems**: Camera inputs for vehicle monitoring systems
+- **In-Vehicle Infotainment**: Display connectivity for dashboard systems
 
 ### Industrial and IoT Applications
-- **Machine Vision**: High-speed camera interfaces for industrial inspection systems
+- **Machine Vision**: Camera interfaces for industrial inspection systems
 - **Medical Imaging**: Endoscopic cameras and medical imaging equipment
-- **Security Systems**: High-definition surveillance camera connectivity
-- **Drone and Robotics**: Camera interfaces for autonomous navigation systems
-
-### Computing and Edge AI
-- **Edge AI Devices**: Camera input for AI inference at the edge
-- **Single Board Computers**: Camera modules for Raspberry Pi-like systems
+- **Security Systems**: Camera connectivity for surveillance systems
 - **Embedded Vision**: Computer vision applications in embedded systems
 
-## Implementation Details
+### Computing and Edge Applications
+- **Edge Devices**: Camera input for processing at the edge
+- **Single Board Computers**: Camera modules for development boards
+- **IoT Devices**: Camera interfaces for smart devices
 
-The project implements the following key components:
+## RTL Structure
 
-### Transmitter (TX)
-- Data serialization and parallel-to-serial conversion
-- Clock generation and distribution
-- HS/LP mode switching logic
-- Lane management and control
-- Power management features
-
-### Receiver (RX)
-- Clock data recovery (CDR) circuit
-- Data deserialization and serial-to-parallel conversion
-- Lane synchronization and alignment
-- Error detection and reporting
-- Mode detection (HS/LP)
-
-### Protocol Layer Support
-- Packet header and footer handling
-- Error correction coding (ECC)
-- Checksum verification
-- Flow control mechanisms
-
-## File Structure
+The RTL implementation is organized as follows:
 
 ```
-├── RTL/                          # RTL design files
-│   ├── transmitter/             # Transmitter implementation
-│   ├── receiver/                # Receiver implementation
-│   └── common/                  # Shared modules
-├── testbench/                   # Verification testbenches
-├── constraints/                 # Timing and physical constraints
-├── docs/                        # Documentation and specifications
-├── scripts/                     # Build and simulation scripts
-└── examples/                    # Usage examples and demos
+RTL/
+├── MIPI_RX.v                    # Main MIPI receiver module
+├── MIPI_RX_Controller.v         # RX control logic
+├── MIPI_TX.v                    # Main MIPI transmitter module  
+├── MIPI_TX_Controller.v         # TX control logic
+├── RX_Clock_Manager.v           # Receiver clock management
+├── TX_Clock_Manager.v           # Transmitter clock management
+└── testbench/                   # Verification testbenches
 ```
+
+## Module Descriptions
+
+### MIPI_TX.v
+Main transmitter module responsible for:
+- Parallel to serial data conversion
+- High-speed data transmission
+- Interface with TX controller
+
+### MIPI_TX_Controller.v  
+Transmitter control logic handling:
+- Transmission sequencing
+- Control signal generation
+- State machine management
+
+### TX_Clock_Manager.v
+Clock management for transmitter:
+- Clock generation for TX operations
+- Clock distribution to TX components
+
+### MIPI_RX.v
+Main receiver module responsible for:
+- Serial to parallel data conversion
+- High-speed data reception
+- Interface with RX controller
+
+### MIPI_RX_Controller.v
+Receiver control logic handling:
+- Reception sequencing  
+- Control signal management
+- State machine operations
+
+### RX_Clock_Manager.v
+Clock management for receiver:
+- Clock recovery operations
+- Clock distribution to RX components
 
 ## Getting Started
 
 ### Prerequisites
-- ModelSim/QuestaSim or equivalent HDL simulator
+- Verilog HDL simulator (ModelSim, QuestaSim, or equivalent)
 - Synthesis tool (Synopsys Design Compiler, Xilinx Vivado, etc.)
-- MIPI D-PHY specification document (recommended)
+- Basic understanding of MIPI D-PHY concepts
 
 ### Quick Start
 1. Clone the repository
-2. Set up your simulation environment
-3. Run the provided testbenches
-4. Synthesize the design for your target technology
-
-### Basic Simulation
 ```bash
-# Compile the design
-vlog -f compile_list.f
-
-# Run transmitter testbench
-vsim -do "run_tx_tb.do"
-
-# Run receiver testbench
-vsim -do "run_rx_tb.do"
-
-# Run full system testbench
-vsim -do "run_system_tb.do"
+git clone https://github.com/MohamedEhab13/Design-and-Implementation-of-MIPI-D-PHY-Transmitter-and-Receiver.git
 ```
+
+2. Navigate to the RTL directory
+```bash
+cd Design-and-Implementation-of-MIPI-D-PHY-Transmitter-and-Receiver/RTL
+```
+
+3. Set up your simulation environment and compile the design files
+
+4. Run the provided testbenches to verify functionality
 
 ## Simulation and Testing
 
-The project includes comprehensive testbenches covering:
-
-- Individual module testing (unit tests)
-- Transmitter-receiver loopback testing
-- Multi-lane operation verification
-- HS/LP mode switching validation
-- Error injection and recovery testing
-- Performance benchmarking
-
-## Performance Specifications
-
-| Parameter | Specification |
-|-----------|---------------|
-| Data Rate | 80 Mbps - 2.5 Gbps per lane |
-| Number of Lanes | 1-4 configurable |
-| Clock Frequency | Up to 1.25 GHz (DDR) |
-| Power Supply | 1.2V core, 1.8V I/O |
-| Technology | 28nm CMOS (configurable) |
-| Jitter Performance | < 50ps RMS |
-
-## Future Enhancements
-
-- Support for MIPI D-PHY v2.1 features
-- Enhanced power management modes
-- Additional lane configurations
-- Built-in self-test (BIST) capabilities
-- Performance optimization for specific applications
+The project includes testbenches for:
+- Individual module verification
+- Transmitter functionality testing
+- Receiver functionality testing  
+- Clock manager validation
+- Controller logic verification
 
 ## Contributing
 
